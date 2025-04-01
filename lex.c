@@ -4,11 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "lex.h"
-
-static int is_whitespace(char c) {
-    return c == ' ' || c == '\t' || c == '\n' ||
-        c == '\v' || c == '\f' || c == '\r';
-}
+#include "stringlib.h"
 
 int lexer_setsource(const char* src, Lexer* lexer) {
     if (src == NULL || lexer == NULL) return 1;
@@ -16,8 +12,6 @@ int lexer_setsource(const char* src, Lexer* lexer) {
     size_t src_len = strlen(src);
     void* alloc = malloc(src_len)
     if(alloc == NULL) return 1;
-
-    
 
     strcpy(lexer->source, src);
     lexer->pos = lexer->source;
