@@ -1,20 +1,15 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
-/**
- * too lazy to write documentation rn
- * @brief Loop until no whitespace
- * 
- * @param c 
- * @return int 
- */
-int loop_until_no_whitespace(char* c) {
+#include <stdlib.h>
+
+char* loop_until_no_whitespace(char* c) {
     while(*c != '\0' && isspace(*c))
         c++;
     return c;
 }
 
-int loop_until_whitespace(char* c) {
+char* loop_until_whitespace(char* c) {
     while(*c != '\0' && !isspace(*c))
         c++;
     return c;
