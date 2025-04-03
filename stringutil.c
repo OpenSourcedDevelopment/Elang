@@ -3,45 +3,49 @@
 #include <string.h>
 #include <stdlib.h>
 
-char* loop_until_no_whitespace(char* c) {
+char* loop_until_no_whitespace(char* c) 
+{
     while(*c != '\0' && isspace(*c))
         c++;
     return c;
 }
 
-char* loop_until_whitespace(char* c) {
+char* loop_until_whitespace(char* c) 
+{
     while(*c != '\0' && !isspace(*c))
         c++;
     return c;
 }
 
-char* replace(const char* str, const char* before, const char* new) {
-    size_t str_len = strlen(str);
+char* replace_a(char* str, const char* before, const char* new)
+{
+    char buffer[1024] = { 0 };
+    char *insert_point = &buffer[0];
+    const char *tmp = str;
     size_t before_len = strlen(before);
-    size_t new_len = strlen(new);
-    
-    char* dummyStr = (char* )malloc(str_len);
-    
-    char* after_last_occurence = str;
-    size_t occurences = 0;
-    
-    while(1)
-    {
-        
-    char* occurence = strstr(str, before);
-    if(occurence == NULL) break;  
-    after_last_occurence = loop_until_whitespace(occurence);
-    occurences++;
-        
+    size_t repl_len = strlen(new);
+
+    while (1) {
+        const char *p = strstr(tmp, before);
+
+        // walked past last occurrence of before; copy remaining part
+        if (p == NULL) {
+            strcpy(insert_point, tmp);
+            break;
+        }
+
+        // copy part before before
+        memcpy(insert_point, tmp, p - tmp);
+        insert_point += p - tmp;
+
+        // copy new string
+        memcpy(insert_point, new, repl_len);
+        insert_point += repl_len;
+
+        // adjust pointers, move on
+        tmp = p + before_len;
     }
-    if(occurences == 0) return NULL;
 
-    // Get the length of all chars in each occurence, subtract from STR, 
-    size_t new_str_len = str_len - (occurences * before_len) + (occurences * new_len);
-    char* new_space = (char* )malloc(new_str_len) + 1;
-    if(new_space == NULL) 
-        return new_space;
-
-
-
+    // write altered string back to str
+    strcpy(str, buffer);
 }
